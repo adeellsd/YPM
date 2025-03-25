@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import logo from '../../assets/logo.png';
+import logo from '../../assets/logo2-white.png';
 
 
 const Header = () => {
@@ -12,8 +12,8 @@ const Header = () => {
         <div className="flex items-center">
           <img src={logo} alt="YPM Logo" className="h-12 mr-3" />
           <div>
-            <h1 className="font-clash font-bold text-xl tracking-[0.5em]">YPM</h1>
-            <p className="font-clash font-extralight text-sm text-[#E2E2E2]">
+          <h1 className="font-clash font-bold text-xl tracking-wider">Yachting Pyrénées Méditerranée</h1>
+            <p className="font-clash font-extralight text-sm text-[#E2E2E2] tracking-wider">
               Food Service Delivery - Concierge Service - Exclusive Experience
             </p>
           </div>

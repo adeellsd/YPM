@@ -13,6 +13,7 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
   
   const menuItems = [
     { path: '/dashboard', icon: <IoHome size={20} />, text: 'Dashboard' },
+    { path: '/contacts', icon: <IoPersonCircle size={20} />, text: 'Contacts' },
     { path: '/clients', icon: <IoPersonCircle size={20} />, text: 'Clients' },
     { path: '/commandes', icon: <IoDocument size={20} />, text: 'Commandes' },
     { path: '/livraisons', icon: <IoCompass size={20} />, text: 'Livraisons' },
