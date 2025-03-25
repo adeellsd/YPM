@@ -1,203 +1,200 @@
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
+import { IoAdd, IoTrash, IoPencil, IoEye, IoMail, IoCall } from 'react-icons/io5';
 import DataTable from '../components/tables/DataTable';
 import Button from '../components/common/Button';
-import FormWrapper from '../components/forms/FormWrapper';
-import InputField from '../components/forms/InputField';
-import SelectField from '../components/forms/SelectField';
+import Badge from '../components/common/Badge';
 
 const Contacts = () => {
-  const [showForm, setShowForm] = useState(false);
-  const [currentContact, setCurrentContact] = useState(null);
   const [contacts, setContacts] = useState([
-    { id: 1, nom: 'Dupont', prenom: 'Jean', genre: 'homme', email: 'jean.dupont@example.com', telephone: '06 12 34 56 78', societe: 'ABC Yachting', role: 'Directeur' },
-    { id: 2, nom: 'Martin', prenom: 'Sophie', genre: 'femme', email: 'sophie.martin@example.com', telephone: '07 23 45 67 89', societe: 'Méditerranée Boats', role: 'Responsable Achats' },
-    { id: 3, nom: 'Leroy', prenom: 'Philippe', genre: 'homme', email: 'philippe.leroy@example.com', telephone: '06 34 56 78 90', societe: 'Yacht Services', role: 'Commercial' },
-    { id: 4, nom: 'Garcia', prenom: 'Maria', genre: 'femme', email: 'maria.garcia@example.com', telephone: '07 45 67 89 01', societe: 'Navalia', role: 'Directrice' },
-    { id: 5, nom: 'Bernard', prenom: 'Lucie', genre: 'femme', email: 'lucie.bernard@example.com', telephone: '06 56 78 90 12', societe: 'Boat Supply', role: 'Assistante' },
+    {
+      id: 1,
+      nom: 'Jean Dupont',
+      poste: 'Capitaine',
+      email: 'jean.dupont@yachtazur.com',
+      telephone: '+33 6 12 34 56 78',
+      yacht: 'Azur One',
+      client: 'Yacht Azur',
+      type: 'Client',
+    },
+    {
+      id: 2,
+      nom: 'Marie Martin',
+      poste: 'Propriétaire',
+      email: 'marie.martin@medicrosiere.fr',
+      telephone: '+33 6 23 45 67 89',
+      yacht: 'Médi Dream',
+      client: 'Médi Croisière',
+      type: 'Client',
+    },
+    {
+      id: 3,
+      nom: 'Robert Mercier',
+      poste: 'Directeur',
+      email: 'contact@mediprovisions.com',
+      telephone: '+33 4 93 12 34 56',
+      yacht: null,
+      client: 'Méditerranée Provisions',
+      type: 'Fournisseur',
+    },
+    {
+      id: 4,
+      nom: 'Sophie Bernard',
+      poste: 'Chef',
+      email: 'sophie.bernard@gmail.com',
+      telephone: '+33 6 45 67 89 01',
+      yacht: 'Med Explorer',
+      client: 'Mediterranean Yacht Club',
+      type: 'Personnel',
+    },
+    {
+      id: 5,
+      nom: 'Pierre Lambert',
+      poste: 'Manager',
+      email: 'contact@sailsun.com',
+      telephone: '+33 6 34 56 78 90',
+      yacht: 'Sun Runner',
+      client: 'Sail & Sun',
+      type: 'Client',
+    },
   ]);
 
-  // Formulaire
-  const [formData, setFormData] = useState({
-    nom: '',
-    prenom: '',
-    genre: '',
-    email: '',
-    telephone: '',
-    societe: '',
-    role: '',
-    adresse: ''
-  });
+  const handleDeleteContact = (id) => {
+    if (window.confirm('Êtes-vous sûr de vouloir supprimer ce contact ?')) {
+      setContacts(contacts.filter(contact => contact.id !== id));
+    }
+  };
 
-  // Options pour le genre
-  const genreOptions = [
-    { value: 'homme', label: 'Homme' },
-    { value: 'femme', label: 'Femme' },
-    { value: 'autre', label: 'Autre' }
-  ];
+  const handleSendEmail = (email) => {
+    window.location.href = `mailto:${email}`;
+  };
 
-  // Colonnes pour le tableau
+  const handleCall = (telephone) => {
+    window.location.href = `tel:${telephone}`;
+  };
+
   const columns = [
-    { header: 'Nom', accessor: 'nom' },
-    { header: 'Prénom', accessor: 'prenom' },
-    { header: 'Email', accessor: 'email' },
-    { header: 'Téléphone', accessor: 'telephone' },
-    { header: 'Société', accessor: 'societe' },
-    { header: 'Rôle', accessor: 'role' }
+    {
+      Header: 'ID',
+      accessor: 'id',
+    },
+    {
+      Header: 'Nom',
+      accessor: 'nom',
+    },
+    {
+      Header: 'Poste',
+      accessor: 'poste',
+    },
+    {
+      Header: 'Email',
+      accessor: 'email',
+      Cell: ({ value }) => (
+        <a href={`mailto:${value}`} className="text-[#292F6A] hover:underline">
+          {value}
+        </a>
+      ),
+    },
+    {
+      Header: 'Téléphone',
+      accessor: 'telephone',
+      Cell: ({ value }) => (
+        <a href={`tel:${value}`} className="text-[#292F6A] hover:underline">
+          {value}
+        </a>
+      ),
+    },
+    {
+      Header: 'Client/Fournisseur',
+      accessor: 'client',
+    },
+    {
+      Header: 'Yacht',
+      accessor: 'yacht',
+      Cell: ({ value }) => value || '-',
+    },
+    {
+      Header: 'Type',
+      accessor: 'type',
+      Cell: ({ value }) => {
+        let badgeVariant = 'default';
+        switch (value.toLowerCase()) {
+          case 'client':
+            badgeVariant = 'primary';
+            break;
+          case 'fournisseur':
+            badgeVariant = 'info';
+            break;
+          case 'personnel':
+            badgeVariant = 'success';
+            break;
+          default:
+            badgeVariant = 'default';
+        }
+        return <Badge variant={badgeVariant}>{value}</Badge>;
+      },
+    },
+    {
+      Header: 'Actions',
+      accessor: 'actions',
+      sortable: false,
+      Cell: ({ row }) => (
+        <div className="flex space-x-2">
+          <Link to={`/contacts/${row.id}/view`}>
+            <Button variant="ghost" size="sm" className="p-1">
+              <IoEye className="h-4 w-4" />
+            </Button>
+          </Link>
+          <Link to={`/contacts/${row.id}/edit`}>
+            <Button variant="ghost" size="sm" className="p-1">
+              <IoPencil className="h-4 w-4" />
+            </Button>
+          </Link>
+          <Button 
+            variant="ghost" 
+            size="sm" 
+            className="p-1 text-blue-600"
+            onClick={() => handleSendEmail(row.email)}
+          >
+            <IoMail className="h-4 w-4" />
+          </Button>
+          <Button 
+            variant="ghost" 
+            size="sm" 
+            className="p-1 text-green-600"
+            onClick={() => handleCall(row.telephone)}
+          >
+            <IoCall className="h-4 w-4" />
+          </Button>
+          <Button 
+            variant="ghost" 
+            size="sm" 
+            className="p-1 text-red-600 hover:text-red-800"
+            onClick={() => handleDeleteContact(row.id)}
+          >
+            <IoTrash className="h-4 w-4" />
+          </Button>
+        </div>
+      ),
+    },
   ];
-
-  // Gérer l'ouverture du formulaire d'ajout
-  const handleAddClick = () => {
-    setCurrentContact(null);
-    setFormData({
-      nom: '',
-      prenom: '',
-      genre: '',
-      email: '',
-      telephone: '',
-      societe: '',
-      role: '',
-      adresse: ''
-    });
-    setShowForm(true);
-  };
-
-  // Gérer l'ouverture du formulaire de modification
-  const handleEditClick = (contact) => {
-    setCurrentContact(contact);
-    setFormData({
-      nom: contact.nom,
-      prenom: contact.prenom,
-      genre: contact.genre,
-      email: contact.email,
-      telephone: contact.telephone,
-      societe: contact.societe,
-      role: contact.role,
-      adresse: contact.adresse || ''
-    });
-    setShowForm(true);
-  };
-
-  // Gérer la suppression
-  const handleDeleteClick = (contact) => {
-    if (window.confirm(`Êtes-vous sûr de vouloir supprimer le contact ${contact.prenom} ${contact.nom} ?`)) {
-      setContacts(contacts.filter(c => c.id !== contact.id));
-    }
-  };
-
-  // Gérer les changements dans le formulaire
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setFormData({
-      ...formData,
-      [name]: value
-    });
-  };
-
-  // Gérer la soumission du formulaire
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    
-    if (currentContact) {
-      // Mise à jour d'un contact existant
-      setContacts(contacts.map(contact => 
-        contact.id === currentContact.id ? { ...contact, ...formData } : contact
-      ));
-    } else {
-      // Ajout d'un nouveau contact
-      const newContact = {
-        id: contacts.length + 1,
-        ...formData
-      };
-      setContacts([...contacts, newContact]);
-    }
-    
-    // Fermer le formulaire
-    setShowForm(false);
-  };
 
   return (
-    <div className="space-y-6">
-      <div className="flex justify-between items-center">
-        <h1 className="text-2xl font-bold text-gray-800">Gestion des Contacts</h1>
+    <div className="p-6">
+      <div className="flex justify-between items-center mb-6">
+        <h1 className="text-2xl font-clash font-bold text-[#292F6A] tracking-[0.3em]">CONTACTS</h1>
+        <Link to="/contacts/new">
+          <Button variant="primary" className="flex items-center">
+            <IoAdd className="h-5 w-5 mr-1" />
+            Nouveau contact
+          </Button>
+        </Link>
       </div>
-      
-      {showForm ? (
-        <FormWrapper
-          title={currentContact ? "Modifier le contact" : "Ajouter un contact"}
-          onSubmit={handleSubmit}
-          onCancel={() => setShowForm(false)}
-        >
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <InputField
-              label="Nom"
-              name="nom"
-              value={formData.nom}
-              onChange={handleInputChange}
-              required
-            />
-            <InputField
-              label="Prénom"
-              name="prenom"
-              value={formData.prenom}
-              onChange={handleInputChange}
-              required
-            />
-            <SelectField
-              label="Genre"
-              name="genre"
-              value={formData.genre}
-              onChange={handleInputChange}
-              options={genreOptions}
-              required
-            />
-            <InputField
-              label="Email"
-              name="email"
-              type="email"
-              value={formData.email}
-              onChange={handleInputChange}
-              required
-            />
-            <InputField
-              label="Téléphone"
-              name="telephone"
-              value={formData.telephone}
-              onChange={handleInputChange}
-              required
-            />
-            <InputField
-              label="Société"
-              name="societe"
-              value={formData.societe}
-              onChange={handleInputChange}
-              required
-            />
-            <InputField
-              label="Rôle"
-              name="role"
-              value={formData.role}
-              onChange={handleInputChange}
-              required
-            />
-            <InputField
-              label="Adresse"
-              name="adresse"
-              value={formData.adresse}
-              onChange={handleInputChange}
-            />
-          </div>
-        </FormWrapper>
-      ) : (
-        <DataTable
-          title="Liste des contacts"
-          columns={columns}
-          data={contacts}
-          onAdd={handleAddClick}
-          onEdit={handleEditClick}
-          onDelete={handleDeleteClick}
-          addButtonText="Ajouter un contact"
-        />
-      )}
+
+      <DataTable 
+        columns={columns} 
+        data={contacts} 
+      />
     </div>
   );
 };

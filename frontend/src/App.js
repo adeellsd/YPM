@@ -1,43 +1,51 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Routes, Route } from 'react-router-dom';
 import Header from './components/layout/Header';
 import Sidebar from './components/layout/Sidebar';
+import Dashboard from './pages/Dashboard';
+import Clients from './pages/Clients';
+import Commandes from './pages/Commandes';
+import Livraisons from './pages/Livraisons';
+import Factures from './pages/Factures';
+import Devis from './pages/Devis';
+import Fournisseurs from './pages/Fournisseurs';
+import Articles from './pages/Articles';
+import XDock from './pages/XDock';
+import Contacts from './pages/Contacts';
+import './App.css';
 
-// Pages
-// import Dashboard from './pages/Dashboard';
-// import Contacts from './pages/Contacts';
-// import Clients from './pages/Clients';
-// import Fournisseurs from './pages/Fournisseurs';
-// import Articles from './pages/Articles';
-// import Devis from './pages/Devis';
-// import Commandes from './pages/Commandes';
-// import Livraisons from './pages/Livraisons';
-// import Factures from './pages/Factures';
-// import XDock from './pages/XDock';
+const App = () => {
+  const [sidebarOpen, setSidebarOpen] = useState(false);
 
-function App() {
+  const toggleSidebar = () => {
+    setSidebarOpen(!sidebarOpen);
+  };
+
   return (
-    <div className="flex h-screen overflow-hidden">
-      <Sidebar />
-      <div className="flex flex-col flex-1 overflow-hidden">
-        <Header />
-        <main className="flex-1 overflow-y-auto p-6">
+    <div className="flex h-screen bg-gray-100 font-clash">
+      <Sidebar isOpen={sidebarOpen} toggleSidebar={toggleSidebar} />
+      
+      <div className="flex-1 flex flex-col overflow-hidden">
+        <Header toggleSidebar={toggleSidebar} />
+        
+        <main className="flex-1 overflow-x-hidden overflow-y-auto bg-gray-100">
           <Routes>
             <Route path="/" element={<Dashboard />} />
-            <Route path="/contacts" element={<Contacts />} />
+            <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/clients" element={<Clients />} />
-            <Route path="/fournisseurs" element={<Fournisseurs />} />
-            <Route path="/articles" element={<Articles />} />
-            <Route path="/devis" element={<Devis />} />
             <Route path="/commandes" element={<Commandes />} />
             <Route path="/livraisons" element={<Livraisons />} />
             <Route path="/factures" element={<Factures />} />
+            <Route path="/devis" element={<Devis />} />
+            <Route path="/fournisseurs" element={<Fournisseurs />} />
+            <Route path="/articles" element={<Articles />} />
             <Route path="/xdock" element={<XDock />} />
+            <Route path="/contacts" element={<Contacts />} />
           </Routes>
         </main>
       </div>
     </div>
   );
-}
+};
 
 export default App;

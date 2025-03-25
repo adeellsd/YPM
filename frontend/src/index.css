@@ -36,4 +36,7 @@
   .form-input {
     @apply w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-ypm-light;
   }
+  .bg-ypm-bg {
+    background-color: #292F6A;
+  }
 }

@@ -1,48 +1,24 @@
 import React from 'react';
-import Button from '../common/Button';
 
-const FormWrapper = ({
-  children,
-  title,
+const FormWrapper = ({ 
+  title, 
+  description, 
+  children, 
+  className = '', 
   onSubmit,
-  onCancel,
-  submitText = 'Enregistrer',
-  cancelText = 'Annuler',
-  loading = false
+  ...props 
 }) => {
   return (
-    <div className="bg-white rounded-lg shadow-md overflow-hidden">
+    <div className={`bg-white rounded-lg shadow p-6 ${className}`} {...props}>
       {title && (
-        <div className="border-b border-gray-200 p-4 bg-gray-50">
-          <h3 className="text-lg font-medium text-gray-900">{title}</h3>
-        </div>
+        <h2 className="text-xl font-clash font-bold text-[#292F6A] mb-2">{title}</h2>
+      )}
+      {description && (
+        <p className="text-gray-600 font-clash font-light mb-6">{description}</p>
       )}
       
       <form onSubmit={onSubmit}>
-        <div className="p-6">
-          {children}
-        </div>
-        
-        <div className="border-t border-gray-200 p-4 bg-gray-50 flex justify-end space-x-3">
-          {onCancel && (
-            <Button
-              type="button"
-              variant="outline"
-              onClick={onCancel}
-              className="px-4 py-2"
-            >
-              {cancelText}
-            </Button>
-          )}
-          <Button
-            type="submit"
-            variant="primary"
-            disabled={loading}
-            className="px-4 py-2"
-          >
-            {loading ? 'Chargement...' : submitText}
-          </Button>
-        </div>
+        {children}
       </form>
     </div>
   );

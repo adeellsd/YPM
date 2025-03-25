@@ -1,38 +1,101 @@
-import React from 'react';
-import { MagnifyingGlassIcon, BellIcon, UserCircleIcon } from '@heroicons/react/24/outline';
+import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
+import logo from '../../assets/logo.png';
+
 
 const Header = () => {
+  const [isOpen, setIsOpen] = useState(false);
+
   return (
-    <header className="bg-white border-b border-gray-200 sticky top-0 z-10">
-      <div className="flex items-center justify-between px-6 py-3">
-        <div className="flex flex-1">
-          <div className="relative w-64">
-            <input 
-              type="text" 
-              placeholder="Rechercher..." 
-              className="w-full pl-10 pr-4 py-2 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-ypm-light"
+    <header className="bg-[#292F6A] text-[#F6F3D0] py-4 z-20 relative">
+      <div className="container mx-auto px-4 flex justify-between items-center">
+        <div className="flex items-center">
+          <img src={logo} alt="YPM Logo" className="h-12 mr-3" />
+          <div>
+            <h1 className="font-clash font-bold text-xl tracking-[0.5em]">YPM</h1>
+            <p className="font-clash font-extralight text-sm text-[#E2E2E2]">
+              Food Service Delivery - Concierge Service - Exclusive Experience
+            </p>
+          </div>
+        </div>
+
+        {/* Navigation Desktop */}
+        <nav className="hidden md:block">
+          <ul className="flex space-x-6">
+            <li>
+              <Link to="/" className="font-clash font-medium hover:opacity-80 transition-opacity">
+                Accueil
+              </Link>
+            </li>
+            <li>
+              <Link to="/services" className="font-clash font-medium hover:opacity-80 transition-opacity">
+                Services
+              </Link>
+            </li>
+            <li>
+              <Link to="/contact" className="font-clash font-medium hover:opacity-80 transition-opacity">
+                Contact
+              </Link>
+            </li>
+          </ul>
+        </nav>
+
+        {/* Menu mobile toggle */}
+        <button 
+          className="md:hidden focus:outline-none" 
+          onClick={() => setIsOpen(!isOpen)}
+        >
+          <svg 
+            xmlns="http://www.w3.org/2000/svg" 
+            className="h-6 w-6" 
+            fill="none" 
+            viewBox="0 0 24 24" 
+            stroke="currentColor"
+          >
+            <path 
+              strokeLinecap="round" 
+              strokeLinejoin="round" 
+              strokeWidth={2} 
+              d={isOpen ? "M6 18L18 6M6 6l12 12" : "M4 6h16M4 12h16M4 18h16"}
             />
-            <MagnifyingGlassIcon className="absolute left-3 top-2.5 h-5 w-5 text-gray-400" />
-          </div>
-        </div>
-        
-        <div className="flex items-center space-x-4">
-          <button className="relative p-1 rounded-full text-gray-500 hover:text-gray-700 focus:outline-none">
-            <BellIcon className="h-6 w-6" />
-            <span className="absolute top-0 right-0 h-4 w-4 rounded-full bg-red-500 text-xs text-white flex items-center justify-center">
-              3
-            </span>
-          </button>
-          
-          <div className="flex items-center">
-            <UserCircleIcon className="h-8 w-8 text-gray-500" />
-            <div className="ml-2">
-              <p className="text-sm font-medium text-gray-700">Admin YPM</p>
-              <p className="text-xs text-gray-500">admin@ypm.fr</p>
-            </div>
-          </div>
-        </div>
+          </svg>
+        </button>
       </div>
+
+      {/* Menu mobile */}
+      {isOpen && (
+        <div className="md:hidden container mx-auto px-4 py-2">
+          <ul className="flex flex-col space-y-2">
+            <li>
+              <Link 
+                to="/" 
+                className="font-clash font-medium block py-1"
+                onClick={() => setIsOpen(false)}
+              >
+                Accueil
+              </Link>
+            </li>
+            <li>
+              <Link 
+                to="/services" 
+                className="font-clash font-medium block py-1"
+                onClick={() => setIsOpen(false)}
+              >
+                Services
+              </Link>
+            </li>
+            <li>
+              <Link 
+                to="/contact" 
+                className="font-clash font-medium block py-1"
+                onClick={() => setIsOpen(false)}
+              >
+                Contact
+              </Link>
+            </li>
+          </ul>
+        </div>
+      )}
     </header>
   );
 };

@@ -1,180 +1,106 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
+import { IoBoat, IoPersonCircle, IoDocument, IoReceipt, IoCompass, IoStatsChart } from 'react-icons/io5';
 import Card from '../components/common/Card';
-import { 
-  UserGroupIcon, 
-  BuildingOfficeIcon,
-  TruckIcon, 
-  CubeIcon,
-  DocumentTextIcon,
-  ShoppingCartIcon 
-} from '@heroicons/react/24/outline';
+
+const DashboardCard = ({ title, value, icon, color, link }) => {
+  return (
+    <Link to={link}>
+      <Card className="h-full transition-transform hover:scale-105">
+        <div className="flex items-center">
+          <div className={`p-3 rounded-full ${color} text-white mr-4`}>
+            {icon}
+          </div>
+          <div>
+            <p className="text-gray-600 font-clash font-light">{title}</p>
+            <p className="text-2xl font-clash font-bold text-[#292F6A]">{value}</p>
+          </div>
+        </div>
+      </Card>
+    </Link>
+  );
+};
 
 const Dashboard = () => {
-  // Données pour les widgets
+  // Données fictives pour le tableau de bord
   const stats = [
-    { 
-      id: 1, 
-      title: 'Clients', 
-      value: '124', 
-      change: '+12%', 
-      icon: BuildingOfficeIcon, 
-      color: 'bg-blue-500' 
-    },
-    { 
-      id: 2, 
-      title: 'Contacts', 
-      value: '543', 
-      change: '+8%', 
-      icon: UserGroupIcon, 
-      color: 'bg-green-500' 
-    },
-    { 
-      id: 3, 
-      title: 'Fournisseurs', 
-      value: '38', 
-      change: '+5%', 
-      icon: TruckIcon, 
-      color: 'bg-purple-500' 
-    },
-    { 
-      id: 4, 
-      title: 'Articles', 
-      value: '1,251', 
-      change: '+22%', 
-      icon: CubeIcon, 
-      color: 'bg-amber-500' 
-    },
-    { 
-      id: 5, 
-      title: 'Commandes', 
-      value: '245', 
-      change: '+18%', 
-      icon: ShoppingCartIcon, 
-      color: 'bg-indigo-500' 
-    },
-    { 
-      id: 6, 
-      title: 'Devis', 
-      value: '82', 
-      change: '+15%', 
-      icon: DocumentTextIcon, 
-      color: 'bg-pink-500' 
-    },
+    { title: 'Clients', value: '24', icon: <IoPersonCircle size={24} />, color: 'bg-blue-500', link: '/clients' },
+    { title: 'Commandes', value: '12', icon: <IoDocument size={24} />, color: 'bg-yellow-500', link: '/commandes' },
+    { title: 'Livraisons', value: '8', icon: <IoCompass size={24} />, color: 'bg-green-500', link: '/livraisons' },
+    { title: 'Factures', value: '16', icon: <IoReceipt size={24} />, color: 'bg-purple-500', link: '/factures' },
+    { title: 'Fournisseurs', value: '6', icon: <IoBoat size={24} />, color: 'bg-red-500', link: '/fournisseurs' },
+    { title: 'Projets', value: '4', icon: <IoStatsChart size={24} />, color: 'bg-indigo-500', link: '/xdock' },
   ];
 
-  // Activités récentes (données fictives)
+  // Données fictives pour les activités récentes
   const recentActivities = [
-    { id: 1, type: 'commande', ref: 'BC-1235', client: 'ABC Yachting', time: '2 heures' },
-    { id: 2, type: 'devis', ref: 'D-4821', client: 'Méditerranée Boats', time: '4 heures' },
-    { id: 3, type: 'livraison', ref: 'BL-0923', client: 'Yacht Services', time: '6 heures' },
-    { id: 4, type: 'contact', ref: 'Jean Dupont', client: 'Navalia', time: '1 jour' },
-    { id: 5, type: 'facture', ref: 'F-2241', client: 'Boat Supply', time: '1 jour' },
+    { id: 1, description: 'Nouvelle commande de Yacht Azur', time: 'Il y a 2 heures', status: 'En attente' },
+    { id: 2, description: 'Livraison effectuée pour Médi Croisière', time: 'Il y a 5 heures', status: 'Complétée' },
+    { id: 3, description: 'Facture #1203 payée', time: 'Hier', status: 'Payée' },
+    { id: 4, description: 'Nouveau devis créé pour Sail & Sun', time: 'Hier', status: 'En attente' },
+    { id: 5, description: 'Commande #45 modifiée', time: 'Il y a 2 jours', status: 'Modifiée' },
   ];
 
   return (
-    <div className="space-y-6">
-      <div className="flex justify-between items-center">
-        <h1 className="text-2xl font-bold text-gray-800">Tableau de bord</h1>
-        <p className="text-sm text-gray-500">Lundi 17 mars 2025</p>
+    <div className="p-6">
+      <h1 className="text-2xl font-clash font-bold text-[#292F6A] tracking-[0.3em] mb-6">TABLEAU DE BORD</h1>
+      
+      {/* Cartes statistiques */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+        {stats.map((stat, index) => (
+          <DashboardCard 
+            key={index}
+            title={stat.title}
+            value={stat.value}
+            icon={stat.icon}
+            color={stat.color}
+            link={stat.link}
+          />
+        ))}
       </div>
       
-      {/* Bannière de bienvenue */}
-      <div className="relative rounded-xl overflow-hidden bg-gradient-to-r from-ypm-navy to-ypm-blue h-48">
-        <div className="relative p-8 flex flex-col h-full justify-center">
-          <h2 className="text-white text-2xl font-bold mb-2">Bienvenue dans votre CRM/SCM</h2>
-          <p className="text-blue-100 max-w-2xl">
-            Gérez efficacement vos relations clients et votre chaîne d'approvisionnement avec Yachting Pyrénées Méditerranée.
-          </p>
+      {/* Activités récentes */}
+      <div className="bg-white rounded-lg shadow p-6">
+        <h2 className="text-xl font-clash font-bold text-[#292F6A] mb-4">Activités récentes</h2>
+        <div className="overflow-x-auto">
+          <table className="min-w-full">
+            <thead className="bg-gray-50">
+              <tr>
+                <th className="px-6 py-3 text-left text-xs font-clash font-medium text-gray-500 uppercase tracking-wider">
+                  Description
+                </th>
+                <th className="px-6 py-3 text-left text-xs font-clash font-medium text-gray-500 uppercase tracking-wider">
+                  Heure
+                </th>
+                <th className="px-6 py-3 text-left text-xs font-clash font-medium text-gray-500 uppercase tracking-wider">
+                  Statut
+                </th>
+              </tr>
+            </thead>
+            <tbody className="bg-white divide-y divide-gray-200">
+              {recentActivities.map((activity) => (
+                <tr key={activity.id} className="hover:bg-gray-50">
+                  <td className="px-6 py-4 whitespace-nowrap text-sm font-clash font-medium text-gray-900">
+                    {activity.description}
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm font-clash font-light text-gray-500">
+                    {activity.time}
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <span className={`px-2 inline-flex text-xs leading-5 font-clash font-medium rounded-full ${
+                      activity.status === 'Complétée' ? 'bg-green-100 text-green-800' :
+                      activity.status === 'En attente' ? 'bg-yellow-100 text-yellow-800' :
+                      activity.status === 'Payée' ? 'bg-blue-100 text-blue-800' :
+                      'bg-gray-100 text-gray-800'
+                    }`}>
+                      {activity.status}
+                    </span>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         </div>
-      </div>
-      
-      {/* Widgets statistiques */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-6">
-        {stats.map((stat) => {
-          const Icon = stat.icon;
-          return (
-            <Card key={stat.id} className="flex flex-col">
-              <div className="flex items-center justify-between mb-4">
-                <h3 className="text-sm font-medium text-gray-500">{stat.title}</h3>
-                <span className={`p-2 rounded-full ${stat.color} bg-opacity-20`}>
-                  <Icon className={`h-5 w-5 ${stat.color} text-opacity-100`} />
-                </span>
-              </div>
-              <div className="flex items-baseline">
-                <span className="text-2xl font-semibold text-gray-900">{stat.value}</span>
-                <span className="ml-2 text-sm font-medium text-green-600">{stat.change}</span>
-              </div>
-            </Card>
-          );
-        })}
-      </div>
-      
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {/* Activité récente */}
-        <Card title="Activité récente" className="lg:col-span-2">
-          <ul className="divide-y divide-gray-200">
-            {recentActivities.map((activity) => (
-              <li key={activity.id} className="py-3 flex items-start">
-                <div className="flex-shrink-0 h-10 w-10 rounded-full bg-ypm-blue/10 flex items-center justify-center text-ypm-blue">
-                  {activity.type === 'commande' && <ShoppingCartIcon className="h-5 w-5" />}
-                  {activity.type === 'devis' && <DocumentTextIcon className="h-5 w-5" />}
-                  {activity.type === 'livraison' && <TruckIcon className="h-5 w-5" />}
-                  {activity.type === 'contact' && <UserGroupIcon className="h-5 w-5" />}
-                  {activity.type === 'facture' && <DocumentTextIcon className="h-5 w-5" />}
-                </div>
-                <div className="ml-3 flex-1">
-                  <p className="text-sm font-medium text-gray-900">
-                    Nouveau {activity.type}: {activity.ref}
-                  </p>
-                  <p className="text-sm text-gray-500">
-                    Client: {activity.client} | il y a {activity.time}
-                  </p>
-                </div>
-              </li>
-            ))}
-          </ul>
-        </Card>
-        
-        {/* Tâches à suivre */}
-        <Card title="Tâches à suivre">
-          <ul className="space-y-3">
-            <li className="flex items-center">
-              <input type="checkbox" className="h-4 w-4 text-ypm-blue rounded border-gray-300" />
-              <span className="ml-3 text-sm text-gray-700">Relancer le client ABC Yachting</span>
-              <span className="ml-auto inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800">
-                Urgent
-              </span>
-            </li>
-            <li className="flex items-center">
-              <input type="checkbox" className="h-4 w-4 text-ypm-blue rounded border-gray-300" />
-              <span className="ml-3 text-sm text-gray-700">Valider le devis #D-4821</span>
-              <span className="ml-auto inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
-                Medium
-              </span>
-            </li>
-            <li className="flex items-center">
-              <input type="checkbox" className="h-4 w-4 text-ypm-blue rounded border-gray-300" />
-              <span className="ml-3 text-sm text-gray-700">Vérifier la livraison XDock #BL-0882</span>
-              <span className="ml-auto inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800">
-                Urgent
-              </span>
-            </li>
-            <li className="flex items-center">
-              <input type="checkbox" className="h-4 w-4 text-ypm-blue rounded border-gray-300" />
-              <span className="ml-3 text-sm text-gray-700">Mettre à jour les prix fournisseurs</span>
-              <span className="ml-auto inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
-                Normal
-              </span>
-            </li>
-            <li className="flex items-center">
-              <input type="checkbox" className="h-4 w-4 text-ypm-blue rounded border-gray-300" />
-              <span className="ml-3 text-sm text-gray-700">Rappeler le contact Jean Dupont</span>
-              <span className="ml-auto inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
-                Medium
-              </span>
-            </li>
-          </ul>
-        </Card>
       </div>
     </div>
   );

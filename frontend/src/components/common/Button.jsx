@@ -2,29 +2,31 @@ import React from 'react';
 
 const Button = ({ 
   children, 
-  type = 'button', 
   variant = 'primary', 
+  size = 'md', 
   className = '', 
-  disabled = false,
-  onClick 
+  ...props 
 }) => {
-  const baseStyles = 'inline-flex items-center justify-center rounded-md font-medium transition-colors';
+  const baseStyle = 'inline-flex items-center justify-center rounded-md font-clash font-medium transition-colors focus:outline-none';
   
-  const variants = {
-    primary: 'bg-ypm-navy text-white hover:bg-ypm-navy/90',
-    secondary: 'bg-ypm-blue text-white hover:bg-ypm-blue/90',
-    outline: 'border border-ypm-navy text-ypm-navy bg-transparent hover:bg-ypm-navy/10',
+  const variantStyles = {
+    primary: 'bg-[#292F6A] text-[#F6F3D0] hover:bg-opacity-90',
+    secondary: 'bg-[#E2E2E2] text-[#292F6A] hover:bg-opacity-90',
+    outline: 'border border-[#292F6A] text-[#292F6A] hover:bg-[#292F6A] hover:text-[#F6F3D0]',
+    ghost: 'text-[#292F6A] hover:bg-[#E2E2E2]',
     danger: 'bg-red-600 text-white hover:bg-red-700'
   };
   
-  const classes = `${baseStyles} ${variants[variant]} ${className} ${disabled ? 'opacity-50 cursor-not-allowed' : ''}`;
+  const sizeStyles = {
+    sm: 'px-3 py-1.5 text-sm',
+    md: 'px-4 py-2',
+    lg: 'px-6 py-3 text-lg'
+  };
   
   return (
-    <button
-      type={type}
-      className={classes}
-      disabled={disabled}
-      onClick={onClick}
+    <button 
+      className={`${baseStyle} ${variantStyles[variant]} ${sizeStyles[size]} ${className}`} 
+      {...props}
     >
       {children}
     </button>

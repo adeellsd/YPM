@@ -1,211 +1,160 @@
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
+import { IoAdd, IoTrash, IoPencil, IoEye } from 'react-icons/io5';
 import DataTable from '../components/tables/DataTable';
-import FormWrapper from '../components/forms/FormWrapper';
-import InputField from '../components/forms/InputField';
-import SelectField from '../components/forms/SelectField';
+import Button from '../components/common/Button';
+import Badge from '../components/common/Badge';
 
 const Clients = () => {
-  const [showForm, setShowForm] = useState(false);
-  const [currentClient, setCurrentClient] = useState(null);
+  // Données fictives pour l'exemple
   const [clients, setClients] = useState([
-    { id: 1, raisonSociale: 'ABC Yachting', siret: '12345678900010', type: 'Yachting', adresse: '12 Quai du Port, Marseille', email: 'contact@abcyachting.com', telephone: '04 12 34 56 78', adresseLivraison: '12 Quai du Port, Marseille', delaiPaiement: '30 jours' },
-    { id: 2, raisonSociale: 'Méditerranée Boats', siret: '23456789000020', type: 'Yachting', adresse: '5 Avenue de la Plage, Nice', email: 'info@medboats.com', telephone: '04 23 45 67 89', adresseLivraison: '5 Avenue de la Plage, Nice', delaiPaiement: '45 jours' },
-    { id: 3, raisonSociale: 'Restaurant La Marina', siret: '34567890000030', type: 'Restauration', adresse: '18 Rue du Port, Cannes', email: 'contact@lamarina.com', telephone: '04 34 56 78 90', adresseLivraison: '18 Rue du Port, Cannes', delaiPaiement: '30 jours' },
-    { id: 4, raisonSociale: 'Industrie Navale Tech', siret: '45678900000040', type: 'Industrie', adresse: '42 Zone Industrielle, Toulon', email: 'contact@navaletech.com', telephone: '04 45 67 89 01', adresseLivraison: '42 Zone Industrielle, Toulon', delaiPaiement: '60 jours' },
-    { id: 5, raisonSociale: 'Yacht Club Saint-Tropez', siret: '56789000000050', type: 'Yachting', adresse: '1 Port de Saint-Tropez, Saint-Tropez', email: 'info@ycst.com', telephone: '04 56 78 90 12', adresseLivraison: '1 Port de Saint-Tropez, Saint-Tropez', delaiPaiement: '30 jours' },
+    {
+      id: 1,
+      nom: 'Yacht Azur',
+      contact: 'Jean Dupont',
+      email: 'contact@yachtazur.com',
+      telephone: '+33 6 12 34 56 78',
+      yacht: 'Azur One',
+      statut: 'Actif',
+    },
+    {
+      id: 2,
+      nom: 'Médi Croisière',
+      contact: 'Marie Martin',
+      email: 'info@medicrosiere.fr',
+      telephone: '+33 6 23 45 67 89',
+      yacht: 'Médi Dream',
+      statut: 'Actif',
+    },
+    {
+      id: 3,
+      nom: 'Sail & Sun',
+      contact: 'Pierre Lambert',
+      email: 'contact@sailsun.com',
+      telephone: '+33 6 34 56 78 90',
+      yacht: 'Sun Runner',
+      statut: 'Inactif',
+    },
+    {
+      id: 4,
+      nom: 'Mediterranean Yacht Club',
+      contact: 'Sophie Bernard',
+      email: 'info@medyachtclub.com',
+      telephone: '+33 6 45 67 89 01',
+      yacht: 'Med Explorer',
+      statut: 'Actif',
+    },
+    {
+      id: 5,
+      nom: 'Blue Ocean Charter',
+      contact: 'Philippe Rousseau',
+      email: 'contact@blueocean.fr',
+      telephone: '+33 6 56 78 90 12',
+      yacht: 'Ocean Blue II',
+      statut: 'En attente',
+    },
   ]);
 
-  // Formulaire
-  const [formData, setFormData] = useState({
-    raisonSociale: '',
-    siret: '',
-    type: '',
-    adresse: '',
-    email: '',
-    telephone: '',
-    adresseLivraison: '',
-    delaiPaiement: ''
-  });
-
-  // Options pour le type de client
-  const typeOptions = [
-    { value: 'Yachting', label: 'Yachting' },
-    { value: 'Restauration', label: 'Restauration' },
-    { value: 'Industrie', label: 'Industrie' }
-  ];
-
-  // Options pour le délai de paiement
-  const delaiOptions = [
-    { value: '30 jours', label: '30 jours' },
-    { value: '45 jours', label: '45 jours' },
-    { value: '60 jours', label: '60 jours' },
-    { value: '90 jours', label: '90 jours' }
-  ];
-
-  // Colonnes pour le tableau
+  // Colonnes du tableau
   const columns = [
-    { header: 'Raison Sociale', accessor: 'raisonSociale' },
-    { header: 'SIRET', accessor: 'siret' },
-    { header: 'Type', accessor: 'type' },
-    { header: 'Email', accessor: 'email' },
-    { header: 'Téléphone', accessor: 'telephone' }
+    {
+      Header: 'ID',
+      accessor: 'id',
+    },
+    {
+      Header: 'Nom',
+      accessor: 'nom',
+    },
+    {
+      Header: 'Contact',
+      accessor: 'contact',
+    },
+    {
+      Header: 'Email',
+      accessor: 'email',
+    },
+    {
+      Header: 'Téléphone',
+      accessor: 'telephone',
+    },
+    {
+      Header: 'Yacht',
+      accessor: 'yacht',
+    },
+    {
+      Header: 'Statut',
+      accessor: 'statut',
+      Cell: ({ value }) => {
+        let badgeVariant = 'default';
+        switch (value.toLowerCase()) {
+          case 'actif':
+            badgeVariant = 'success';
+            break;
+          case 'inactif':
+            badgeVariant = 'danger';
+            break;
+          case 'en attente':
+            badgeVariant = 'warning';
+            break;
+          default:
+            badgeVariant = 'default';
+        }
+        return <Badge variant={badgeVariant}>{value}</Badge>;
+      },
+    },
+    {
+      Header: 'Actions',
+      accessor: 'actions',
+      sortable: false,
+      Cell: ({ row }) => (
+        <div className="flex space-x-2">
+          <Link to={`/clients/${row.id}/view`}>
+            <Button variant="ghost" size="sm" className="p-1">
+              <IoEye className="h-4 w-4" />
+            </Button>
+          </Link>
+          <Link to={`/clients/${row.id}/edit`}>
+            <Button variant="ghost" size="sm" className="p-1">
+              <IoPencil className="h-4 w-4" />
+            </Button>
+          </Link>
+          <Button 
+            variant="ghost" 
+            size="sm" 
+            className="p-1 text-red-600 hover:text-red-800"
+            onClick={() => handleDeleteClient(row.id)}
+          >
+            <IoTrash className="h-4 w-4" />
+          </Button>
+        </div>
+      ),
+    },
   ];
 
-  // Gérer l'ouverture du formulaire d'ajout
-  const handleAddClick = () => {
-    setCurrentClient(null);
-    setFormData({
-      raisonSociale: '',
-      siret: '',
-      type: '',
-      adresse: '',
-      email: '',
-      telephone: '',
-      adresseLivraison: '',
-      delaiPaiement: ''
-    });
-    setShowForm(true);
-  };
-
-  // Gérer l'ouverture du formulaire de modification
-  const handleEditClick = (client) => {
-    setCurrentClient(client);
-    setFormData({
-      raisonSociale: client.raisonSociale,
-      siret: client.siret,
-      type: client.type,
-      adresse: client.adresse,
-      email: client.email,
-      telephone: client.telephone,
-      adresseLivraison: client.adresseLivraison,
-      delaiPaiement: client.delaiPaiement
-    });
-    setShowForm(true);
-  };
-
-  // Gérer la suppression
-  const handleDeleteClick = (client) => {
-    if (window.confirm(`Êtes-vous sûr de vouloir supprimer le client ${client.raisonSociale} ?`)) {
-      setClients(clients.filter(c => c.id !== client.id));
+  // Fonction pour supprimer un client
+  const handleDeleteClient = (id) => {
+    if (window.confirm('Êtes-vous sûr de vouloir supprimer ce client ?')) {
+      setClients(clients.filter((client) => client.id !== id));
     }
-  };
-
-  // Gérer les changements dans le formulaire
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setFormData({
-      ...formData,
-      [name]: value
-    });
-  };
-
-  // Gérer la soumission du formulaire
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    
-    if (currentClient) {
-      // Mise à jour d'un client existant
-      setClients(clients.map(client => 
-        client.id === currentClient.id ? { ...client, ...formData } : client
-      ));
-    } else {
-      // Ajout d'un nouveau client
-      const newClient = {
-        id: clients.length + 1,
-        ...formData
-      };
-      setClients([...clients, newClient]);
-    }
-    
-    // Fermer le formulaire
-    setShowForm(false);
   };
 
   return (
-    <div className="space-y-6">
-      <div className="flex justify-between items-center">
-        <h1 className="text-2xl font-bold text-gray-800">Gestion des Clients</h1>
+    <div className="p-6">
+      <div className="flex justify-between items-center mb-6">
+        <h1 className="text-2xl font-clash font-bold text-[#292F6A] tracking-[0.3em]">CLIENTS</h1>
+        <Link to="/clients/new">
+          <Button variant="primary" className="flex items-center">
+            <IoAdd className="h-5 w-5 mr-1" />
+            Nouveau client
+          </Button>
+        </Link>
       </div>
-      
-      {showForm ? (
-        <FormWrapper
-          title={currentClient ? "Modifier le client" : "Ajouter un client"}
-          onSubmit={handleSubmit}
-          onCancel={() => setShowForm(false)}
-        >
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <InputField
-              label="Raison Sociale"
-              name="raisonSociale"
-              value={formData.raisonSociale}
-              onChange={handleInputChange}
-              required
-            />
-            <InputField
-              label="SIRET"
-              name="siret"
-              value={formData.siret}
-              onChange={handleInputChange}
-              required
-            />
-            <SelectField
-              label="Type de client"
-              name="type"
-              value={formData.type}
-              onChange={handleInputChange}
-              options={typeOptions}
-              required
-            />
-            <InputField
-              label="Email"
-              name="email"
-              type="email"
-              value={formData.email}
-              onChange={handleInputChange}
-              required
-            />
-            <InputField
-              label="Téléphone"
-              name="telephone"
-              value={formData.telephone}
-              onChange={handleInputChange}
-              required
-            />
-            <InputField
-              label="Adresse"
-              name="adresse"
-              value={formData.adresse}
-              onChange={handleInputChange}
-              required
-            />
-            <InputField
-              label="Adresse de livraison"
-              name="adresseLivraison"
-              value={formData.adresseLivraison}
-              onChange={handleInputChange}
-              required
-            />
-            <SelectField
-              label="Délai de paiement"
-              name="delaiPaiement"
-              value={formData.delaiPaiement}
-              onChange={handleInputChange}
-              options={delaiOptions}
-              required
-            />
-          </div>
-        </FormWrapper>
-      ) : (
-        <DataTable
-          title="Liste des clients"
-          columns={columns}
-          data={clients}
-          onAdd={handleAddClick}
-          onEdit={handleEditClick}
-          onDelete={handleDeleteClick}
-          addButtonText="Ajouter un client"
-        />
-      )}
+
+      <DataTable 
+        columns={columns} 
+        data={clients} 
+        onRowClick={(row) => console.log('Client row clicked:', row)}
+      />
     </div>
   );
 };
