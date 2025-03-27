@@ -1,64 +1,44 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { IoAdd, IoTrash, IoPencil, IoEye } from 'react-icons/io5';
 import DataTable from '../components/tables/DataTable';
 import Button from '../components/common/Button';
 import Badge from '../components/common/Badge';
+import axios from 'axios';
 
 const Clients = () => {
-  // Données fictives pour l'exemple
-  const [clients, setClients] = useState([
-    {
-      id: 1,
-      nom: 'Yacht Azur',
-      contact: 'Jean Dupont',
-      email: 'contact@yachtazur.com',
-      telephone: '+33 6 12 34 56 78',
-      yacht: 'Azur One',
-      statut: 'Actif',
-    },
-    {
-      id: 2,
-      nom: 'Médi Croisière',
-      contact: 'Marie Martin',
-      email: 'info@medicrosiere.fr',
-      telephone: '+33 6 23 45 67 89',
-      yacht: 'Médi Dream',
-      statut: 'Actif',
-    },
-    {
-      id: 3,
-      nom: 'Sail & Sun',
-      contact: 'Pierre Lambert',
-      email: 'contact@sailsun.com',
-      telephone: '+33 6 34 56 78 90',
-      yacht: 'Sun Runner',
-      statut: 'Inactif',
-    },
-    {
-      id: 4,
-      nom: 'Mediterranean Yacht Club',
-      contact: 'Sophie Bernard',
-      email: 'info@medyachtclub.com',
-      telephone: '+33 6 45 67 89 01',
-      yacht: 'Med Explorer',
-      statut: 'Actif',
-    },
-    {
-      id: 5,
-      nom: 'Blue Ocean Charter',
-      contact: 'Philippe Rousseau',
-      email: 'contact@blueocean.fr',
-      telephone: '+33 6 56 78 90 12',
-      yacht: 'Ocean Blue II',
-      statut: 'En attente',
-    },
-  ]);
+  const [clients, setClients] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  // Charger les données des clients depuis l'API
+  useEffect(() => {
+    const fetchClients = async () => {
+      try {
+        setLoading(true);
+        const response = await axios.get('http://10.27.20.200:3000/api/clients');
+        setClients(response.data);
+        setLoading(false);
+      } catch (err) {
+        console.error('Erreur lors du chargement des clients:', err);
+        setError('Impossible de charger les clients. Veuillez réessayer plus tard.');
+        setLoading(false);
+      }
+    };
+
+    fetchClients();
+  }, []);
 
   // Fonction pour supprimer un client
-  const handleDeleteClient = (id) => {
+  const handleDeleteClient = async (id) => {
     if (window.confirm('Êtes-vous sûr de vouloir supprimer ce client ?')) {
-      setClients(clients.filter((client) => client.id !== id));
+      try {
+        await axios.delete(`http://10.27.20.200:3000/api/clients/${id}`);
+        setClients(clients.filter((client) => client.id !== id));
+      } catch (err) {
+        console.error('Erreur lors de la suppression du client:', err);
+        alert('Erreur lors de la suppression du client. Veuillez réessayer.');
+      }
     }
   };
 
@@ -93,7 +73,7 @@ const Clients = () => {
       accessor: 'statut',
       Cell: ({ value }) => {
         let badgeVariant = 'default';
-        switch (value.toLowerCase()) {
+        switch (value?.toLowerCase()) {
           case 'actif':
             badgeVariant = 'success';
             break;
@@ -137,6 +117,29 @@ const Clients = () => {
       ),
     },
   ];
+
+  // Affichage pendant le chargement
+  if (loading) {
+    return (
+      <div className="p-6">
+        <div className="flex justify-center items-center h-64">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#292F6A]"></div>
+        </div>
+      </div>
+    );
+  }
+
+  // Affichage en cas d'erreur
+  if (error) {
+    return (
+      <div className="p-6">
+        <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
+          <strong className="font-bold">Erreur!</strong>
+          <span className="block sm:inline"> {error}</span>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="p-6">

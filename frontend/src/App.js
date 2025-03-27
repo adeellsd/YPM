@@ -22,6 +22,9 @@ import LivraisonsForm from './pages/forms/LivraisonsForm';
 import ContactsForm from './pages/forms/ContactsForm';
 import './App.css';
 
+import FactureView from './pdf-gen/FactureView';
+
+
 const App = () => {
   const [sidebarOpen, setSidebarOpen] = useState(true);
 
@@ -73,7 +76,6 @@ const App = () => {
             {/* Routes factures */}
             <Route path="/factures/new" element={<FacturesForm />} />
             <Route path="/factures/:id/edit" element={<FacturesForm />} />
-            <Route path="/factures/:id/view" element={<FacturesForm />} />
             
             {/* Routes fournisseurs */}
             <Route path="/fournisseurs/new" element={<FournisseursForm />} />
@@ -89,6 +91,10 @@ const App = () => {
             <Route path="/contacts/new" element={<ContactsForm />} />
             <Route path="/contacts/:id/edit" element={<ContactsForm />} />
             <Route path="/contacts/:id/view" element={<ContactsForm />} />
+
+            {/* Routes PDF */}
+            <Route path="/factures/:id/view" element={<FactureView />} />
+
           </Routes>
         </main>
       </div>

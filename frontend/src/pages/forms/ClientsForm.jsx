@@ -1,14 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { IoSave, IoArrowBack } from 'react-icons/io5';
+import axios from 'axios';
 import Button from '../../components/common/Button';
 import InputField from '../../components/forms/InputField';
 import SelectField from '../../components/forms/SelectField';
 
-const ClientForm = () => {
+const ClientsForm = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const isEditMode = Boolean(id);
+  const isViewMode = window.location.pathname.includes('/view');
 
   const [formData, setFormData] = useState({
     nom: '',
@@ -20,26 +22,26 @@ const ClientForm = () => {
   });
 
   const [loading, setLoading] = useState(false);
+  const [fetchLoading, setFetchLoading] = useState(false);
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    // Si on est en mode édition, charger les données du client
+    // Si on est en mode édition ou visualisation, charger les données du client
     if (isEditMode) {
-      setLoading(true);
-      // Simulation de récupération de données
-      setTimeout(() => {
-        // Ces données seraient normalement récupérées de votre API
-        const clientData = {
-          nom: 'Yacht Azur',
-          contact: 'Jean Dupont',
-          email: 'contact@yachtazur.com',
-          telephone: '+33 6 12 34 56 78',
-          yacht: 'Azur One',
-          statut: 'Actif'
-        };
-        setFormData(clientData);
-        setLoading(false);
-      }, 500);
+      const fetchClient = async () => {
+        try {
+          setFetchLoading(true);
+          const response = await axios.get(`http://10.27.20.200:3000/api/clients/${id}`);
+          setFormData(response.data);
+          setFetchLoading(false);
+        } catch (err) {
+          console.error('Erreur lors du chargement du client:', err);
+          setError('Impossible de charger les données du client. Veuillez réessayer.');
+          setFetchLoading(false);
+        }
+      };
+
+      fetchClient();
     }
   }, [id, isEditMode]);
 
@@ -57,15 +59,19 @@ const ClientForm = () => {
     setError(null);
 
     try {
-      // Simulation d'un appel API
-      await new Promise(resolve => setTimeout(resolve, 800));
+      if (isEditMode && !isViewMode) {
+        // Mise à jour d'un client existant
+        await axios.put(`http://10.27.20.200:3000/api/clients/${id}`, formData);
+      } else if (!isViewMode) {
+        // Création d'un nouveau client
+        await axios.post('http://10.27.20.200:3000/api/clients', formData);
+      }
       
       // Redirection après succès
       navigate('/clients');
     } catch (err) {
+      console.error('Erreur lors de l\'enregistrement:', err);
       setError('Une erreur est survenue lors de l\'enregistrement. Veuillez réessayer.');
-      console.error('Erreur lors de la soumission du formulaire :', err);
-    } finally {
       setLoading(false);
     }
   };
@@ -76,7 +82,7 @@ const ClientForm = () => {
     { value: 'En attente', label: 'En attente' }
   ];
 
-  if (loading && isEditMode) {
+  if (fetchLoading) {
     return (
       <div className="p-6">
         <div className="bg-white rounded-lg shadow p-8 max-w-3xl mx-auto">
@@ -92,7 +98,7 @@ const ClientForm = () => {
     <div className="p-6">
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-2xl font-clash font-bold text-[#292F6A] tracking-[0.3em]">
-          {isEditMode ? 'MODIFIER CLIENT' : 'NOUVEAU CLIENT'}
+          {isViewMode ? 'DÉTAILS CLIENT' : isEditMode ? 'MODIFIER CLIENT' : 'NOUVEAU CLIENT'}
         </h1>
         <Button 
           variant="outline" 
@@ -119,6 +125,7 @@ const ClientForm = () => {
               value={formData.nom}
               onChange={handleChange}
               required
+              disabled={isViewMode}
             />
 
             <InputField
@@ -128,6 +135,7 @@ const ClientForm = () => {
               value={formData.contact}
               onChange={handleChange}
               required
+              disabled={isViewMode}
             />
 
             <InputField
@@ -138,6 +146,7 @@ const ClientForm = () => {
               value={formData.email}
               onChange={handleChange}
               required
+              disabled={isViewMode}
             />
 
             <InputField
@@ -147,6 +156,7 @@ const ClientForm = () => {
               value={formData.telephone}
               onChange={handleChange}
               required
+              disabled={isViewMode}
             />
 
             <InputField
@@ -155,6 +165,7 @@ const ClientForm = () => {
               name="yacht"
               value={formData.yacht}
               onChange={handleChange}
+              disabled={isViewMode}
             />
 
             <SelectField
@@ -164,40 +175,43 @@ const ClientForm = () => {
               value={formData.statut}
               onChange={handleChange}
               options={statusOptions}
+              disabled={isViewMode}
             />
           </div>
 
-          <div className="mt-8 flex justify-end">
-            <Button 
-              type="button" 
-              variant="secondary" 
-              className="mr-4"
-              onClick={() => navigate('/clients')}
-            >
-              Annuler
-            </Button>
-            <Button 
-              type="submit" 
-              variant="primary"
-              className="flex items-center"
-              disabled={loading}
-            >
-              {loading ? (
-                <>
-                  <div className="animate-spin h-4 w-4 mr-2 border-b-2 border-white rounded-full"></div>
-                  Enregistrement...
-                </>
-              ) : (
-                <>
-                  <IoSave className="mr-2" /> Enregistrer
-                </>
-              )}
-            </Button>
-          </div>
+          {!isViewMode && (
+            <div className="mt-8 flex justify-end">
+              <Button 
+                type="button" 
+                variant="secondary" 
+                className="mr-4"
+                onClick={() => navigate('/clients')}
+              >
+                Annuler
+              </Button>
+              <Button 
+                type="submit" 
+                variant="primary"
+                className="flex items-center"
+                disabled={loading}
+              >
+                {loading ? (
+                  <>
+                    <div className="animate-spin h-4 w-4 mr-2 border-b-2 border-white rounded-full"></div>
+                    Enregistrement...
+                  </>
+                ) : (
+                  <>
+                    <IoSave className="mr-2" /> Enregistrer
+                  </>
+                )}
+              </Button>
+            </div>
+          )}
         </form>
       </div>
     </div>
   );
 };
 
-export default ClientForm;
+export default ClientsForm;
