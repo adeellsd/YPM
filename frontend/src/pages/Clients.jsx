@@ -55,6 +55,13 @@ const Clients = () => {
     },
   ]);
 
+  // Fonction pour supprimer un client
+  const handleDeleteClient = (id) => {
+    if (window.confirm('Êtes-vous sûr de vouloir supprimer ce client ?')) {
+      setClients(clients.filter((client) => client.id !== id));
+    }
+  };
+
   // Colonnes du tableau
   const columns = [
     {
@@ -130,13 +137,6 @@ const Clients = () => {
       ),
     },
   ];
-
-  // Fonction pour supprimer un client
-  const handleDeleteClient = (id) => {
-    if (window.confirm('Êtes-vous sûr de vouloir supprimer ce client ?')) {
-      setClients(clients.filter((client) => client.id !== id));
-    }
-  };
 
   return (
     <div className="p-6">

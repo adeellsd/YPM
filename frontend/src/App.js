@@ -12,6 +12,14 @@ import Fournisseurs from './pages/Fournisseurs';
 import Articles from './pages/Articles';
 import XDock from './pages/XDock';
 import Contacts from './pages/Contacts';
+import ClientsForm from './pages/forms/ClientsForm';
+import ArticlesForm from './pages/forms/ArticlesForm';
+import CommandesForm from './pages/forms/CommandesForm';
+import DevisForm from './pages/forms/DevisForm';
+import FacturesForm from './pages/forms/FacturesForm';
+import FournisseursForm from './pages/forms/FournisseursForm';
+import LivraisonsForm from './pages/forms/LivraisonsForm';
+import ContactsForm from './pages/forms/ContactsForm';
 import './App.css';
 
 const App = () => {
@@ -41,6 +49,46 @@ const App = () => {
             <Route path="/articles" element={<Articles />} />
             <Route path="/xdock" element={<XDock />} />
             <Route path="/contacts" element={<Contacts />} />
+
+            {/* Routes clients */}
+            <Route path="/clients/new" element={<ClientsForm />} />
+            <Route path="/clients/:id/edit" element={<ClientsForm />} />
+            <Route path="/clients/:id/view" element={<ClientsForm />} />
+            
+            {/* Routes commandes */}
+            <Route path="/commandes/new" element={<CommandesForm />} />
+            <Route path="/commandes/:id/edit" element={<CommandesForm />} />
+            <Route path="/commandes/:id/view" element={<CommandesForm />} />
+            
+            {/* Routes articles */}
+            <Route path="/articles/new" element={<ArticlesForm />} />
+            <Route path="/articles/:id/edit" element={<ArticlesForm />} />
+            <Route path="/articles/:id/view" element={<ArticlesForm />} />
+            
+            {/* Routes devis */}
+            <Route path="/devis/new" element={<DevisForm />} />
+            <Route path="/devis/:id/edit" element={<DevisForm />} />
+            <Route path="/devis/:id/view" element={<DevisForm />} />
+            
+            {/* Routes factures */}
+            <Route path="/factures/new" element={<FacturesForm />} />
+            <Route path="/factures/:id/edit" element={<FacturesForm />} />
+            <Route path="/factures/:id/view" element={<FacturesForm />} />
+            
+            {/* Routes fournisseurs */}
+            <Route path="/fournisseurs/new" element={<FournisseursForm />} />
+            <Route path="/fournisseurs/:id/edit" element={<FournisseursForm />} />
+            <Route path="/fournisseurs/:id/view" element={<FournisseursForm />} />
+            
+            {/* Routes livraisons */}
+            <Route path="/livraisons/new" element={<LivraisonsForm />} />
+            <Route path="/livraisons/:id/edit" element={<LivraisonsForm />} />
+            <Route path="/livraisons/:id/view" element={<LivraisonsForm />} />
+            
+            {/* Routes contacts */}
+            <Route path="/contacts/new" element={<ContactsForm />} />
+            <Route path="/contacts/:id/edit" element={<ContactsForm />} />
+            <Route path="/contacts/:id/view" element={<ContactsForm />} />
           </Routes>
         </main>
       </div>

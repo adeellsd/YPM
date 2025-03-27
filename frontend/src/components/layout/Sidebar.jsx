@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { IoHome, IoBoat, IoDocument, IoPersonCircle, IoStatsChart, IoCompass, IoSettings, IoReceipt, IoGrid } from 'react-icons/io5';
-import Logo from '../../assets/logo-white.png'; // Assurez-vous que le chemin est correct
+import Logo from '../../assets/logo-white.png';
 
 const Sidebar = ({ isOpen, toggleSidebar }) => {
   const location = useLocation();

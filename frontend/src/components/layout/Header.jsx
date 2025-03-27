@@ -19,7 +19,7 @@ const Header = () => {
           </div>
         </div>
 
-        {/* Navigation Desktop */}
+        {/* Navigation Desktop 
         <nav className="hidden md:block">
           <ul className="flex space-x-6">
             <li>
@@ -39,7 +39,9 @@ const Header = () => {
             </li>
           </ul>
         </nav>
+          */}
 
+          
         {/* Menu mobile toggle */}
         <button 
           className="md:hidden focus:outline-none" 
